@@ -17,6 +17,7 @@
 
 namespace Pimcore\Model\DataObject;
 
+use Pimcore\Cache\Runtime;
 use Pimcore\Db\ZendCompatibility\QueryBuilder;
 use Pimcore\Event\DataObjectEvents;
 use Pimcore\Event\Model\DataObjectEvent;
@@ -24,6 +25,8 @@ use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Element;
 use Pimcore\Tool\Admin as AdminTool;
+use Pimcore\Tool\Session;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
  * @method \Pimcore\Model\Element\Dao getDao()
@@ -230,6 +233,14 @@ class Service extends Model\Element\Service
     }
 
     /**
+     * @param $field
+     * @return bool
+     */
+    public static function isHelperGridColumnConfig($field) {
+        return (strpos($field, "#") === 0);
+    }
+
+    /**
      * Language only user for classification store !!!
      *
      * @param  AbstractObject $object
@@ -259,6 +270,9 @@ class Service extends Model\Element\Service
             if (empty($fields)) {
                 $fields = array_keys($object->getclass()->getFieldDefinitions());
             }
+
+            $haveHelperDefinition = false;
+
             foreach ($fields as $key) {
                 $brickType = null;
                 $brickGetter = null;
@@ -267,7 +281,18 @@ class Service extends Model\Element\Service
 
                 $def = $object->getClass()->getFieldDefinition($key);
 
-                if (substr($key, 0, 1) == '~') {
+                if (strpos($key, "#") === 0) {
+                    if (!$haveHelperDefinition) {
+                        $helperDefinitions = self::getHelperDefinitions();
+                        $haveHelperDefinition = true;
+
+                    }
+                    if ($helperDefinitions[$key]) {
+                        $data[$key] = self::calculateCellValue($object, $helperDefinitions, $key);
+
+                    }
+
+                } else if (substr($key, 0, 1) == '~') {
                     $type = $keyParts[1];
                     if ($type == 'classificationstore') {
                         $field = $keyParts[2];
@@ -382,6 +407,74 @@ class Service extends Model\Element\Service
         }
 
         return $data;
+    }
+
+    /**
+     * @param $helperDefinitions
+     * @param $key
+     * @return boolean
+     */
+    public static function expandGridColumnForExport($helperDefinitions, $key) {
+        $config = self::getConfigForHelperDefinition($helperDefinitions, $key);
+        if ($config instanceof Model\DataObject\GridConfig\Operator\AbstractOperator && $config->expandLocales()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * @param $helperDefinitions
+     * @param $key
+     * @return mixed|null|GridConfig\IConfigElement|GridConfig\IConfigElement[]
+     */
+    public static function getConfigForHelperDefinition($helperDefinitions, $key) {
+        $cacheKey = "gridcolumn_config_" . $key;
+        if (Runtime::isRegistered($cacheKey)) {
+            $config = Runtime::get($cacheKey);
+        } else {
+            $definition = $helperDefinitions[$key];
+            $attributes = json_decode(json_encode($definition->attributes));
+
+            /** @var  $operator Model\DataObject\GridConfig\Operator\AbstractOperator */
+            $config = Model\DataObject\GridConfig\Service::buildOutputDataConfig([$attributes]);
+            if (!$config) {
+                return null;
+            }
+            $config = $config[0];
+            Runtime::save($config, $cacheKey);
+
+        }
+        return $config;
+    }
+
+    /**
+     * @param $object
+     * @param $definition
+     * @return null
+     */
+    public static function calculateCellValue($object, $helperDefinitions, $key) {
+        $config = static::getConfigForHelperDefinition($helperDefinitions, $key);
+        if (!$config) {
+            return null;
+        }
+
+
+        $result = $config->getLabeledValue($object);
+        if (isset($result->value)) {
+            return $result->value;
+        }
+        return null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getHelperDefinitions() {
+        return Session::useSession(function (AttributeBagInterface $session)  {
+            $existingColumns = $session->get("helpercolumns", []);
+            return $existingColumns;
+        }, 'pimcore_gridconfig');
     }
 
     /**
@@ -1193,14 +1286,11 @@ class Service extends Model\Element\Service
 
     /**
      * @param $definition
-     *
      * @return mixed
      */
-    public static function cloneDefinition($definition)
-    {
+    public static function cloneDefinition($definition) {
         $deepCopy = new \DeepCopy\DeepCopy();
         $theCopy = $deepCopy->copy($definition);
-
         return $theCopy;
     }
 

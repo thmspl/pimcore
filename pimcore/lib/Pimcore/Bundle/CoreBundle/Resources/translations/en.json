@@ -1562,6 +1562,12 @@
   "click_for_help": "Click for help",
   "operator_objectfieldgetter": "Operator Object Field Getter",
   "operator_lfexpander": "Operator LF Expander",
+  "operator_caseconverter": "Operator Case Converter",
   "attribute": "Attribute",
-  "forward_attribute": "Forward Attribute"
+  "forward_attribute": "Forward Attribute",
+  "upper": "Upper",
+  "lower": "Lower",
+  "disabled": "Disabled",
+  "capitalization":"Capitalization"
+
 }

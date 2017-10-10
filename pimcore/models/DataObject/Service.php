@@ -426,7 +426,7 @@ class Service extends Model\Element\Service
     /**
      * @param $helperDefinitions
      * @param $key
-     * @return mixed|null|GridConfig\IConfigElement|GridConfig\IConfigElement[]
+     * @return mixed|null|GridConfig\ConfigElementInterface|GridConfig\ConfigElementInterface[]
      */
     public static function getConfigForHelperDefinition($helperDefinitions, $key) {
         $cacheKey = "gridcolumn_config_" . $key;

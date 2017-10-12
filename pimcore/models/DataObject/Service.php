@@ -417,7 +417,7 @@ class Service extends Model\Element\Service
     public static function expandGridColumnForExport($helperDefinitions, $key)
     {
         $config = self::getConfigForHelperDefinition($helperDefinitions, $key);
-        if ($config instanceof Model\DataObject\GridConfig\Operator\AbstractOperator && $config->expandLocales()) {
+        if ($config instanceof Model\DataObject\GridColumnConfig\Operator\AbstractOperator && $config->expandLocales()) {
             return true;
         }
 
@@ -428,7 +428,7 @@ class Service extends Model\Element\Service
      * @param $helperDefinitions
      * @param $key
      *
-     * @return mixed|null|GridConfig\ConfigElementInterface|GridConfig\ConfigElementInterface[]
+     * @return mixed|null|GridColumnConfig\ConfigElementInterface|GridColumnConfig\ConfigElementInterface[]
      */
     public static function getConfigForHelperDefinition($helperDefinitions, $key)
     {
@@ -439,8 +439,8 @@ class Service extends Model\Element\Service
             $definition = $helperDefinitions[$key];
             $attributes = json_decode(json_encode($definition->attributes));
 
-            /** @var $operator Model\DataObject\GridConfig\Operator\AbstractOperator */
-            $config = Model\DataObject\GridConfig\Service::buildOutputDataConfig([$attributes]);
+            /** @var $operator Model\DataObject\GridColumnConfig\Operator\AbstractOperator */
+            $config = Model\DataObject\GridColumnConfig\Service::buildOutputDataConfig([$attributes]);
             if (!$config) {
                 return null;
             }

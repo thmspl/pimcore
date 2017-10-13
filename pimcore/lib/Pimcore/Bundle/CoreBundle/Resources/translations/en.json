@@ -1571,5 +1571,11 @@
   "upper": "Upper",
   "lower": "Lower",
   "disabled": "Disabled",
-  "capitalization":"Capitalization"
+  "capitalization":"Capitalization",
+  "restrict_to_locales": "Restrict to locales (csv list)",
+  "predefined": "Predefined",
+  "save_as": "Save as",
+  "remove_config": "Remove Config",
+  "gridconfig_removed": "Grid Config has been removed",
+  "gridconfig_not_removed": "Grid Config could not be removed"
 }

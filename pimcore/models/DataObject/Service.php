@@ -418,7 +418,7 @@ class Service extends Model\Element\Service
     {
         $config = self::getConfigForHelperDefinition($helperDefinitions, $key);
         if ($config instanceof Model\DataObject\GridColumnConfig\Operator\AbstractOperator && $config->expandLocales()) {
-            return true;
+            return $config->getValidLanguages();
         }
 
         return false;

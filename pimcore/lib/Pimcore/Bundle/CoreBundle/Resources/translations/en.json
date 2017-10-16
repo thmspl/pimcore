@@ -148,7 +148,7 @@
   "display": "Display",
   "order": "Order",
   "filter_type": "Filter Type",
-  "column_configuration": "Column Configuration",
+  "column_configuration": "Manage & Share Column Configuration",
   "problem_creating_new_custom_report": "There was a problem during creating the new report",
   "enter_the_name_of_the_new_report": "Enter the name of the new report",
   "add_custom_report": "Add Custom Report",
@@ -1577,5 +1577,11 @@
   "save_as": "Save as",
   "remove_config": "Remove Config",
   "gridconfig_removed": "Grid Config has been removed",
-  "gridconfig_not_removed": "Grid Config could not be removed"
+  "gridconfig_not_removed": "Grid Config could not be removed",
+  "set_as_favourite": "Set as favourite",
+  "your_favourite_has_been_saved": "Your favourite has been saved",
+  "error_saving_favourite": "Error saving favourite",
+  "delete_gridconfig_dblcheck": "Are you sure? Also note that this could be a shared config.",
+  "grid_configuration": "Grid Configuration",
+  "save_and_share": "Save and Share"
 }

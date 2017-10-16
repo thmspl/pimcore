@@ -295,7 +295,7 @@
     background: url(/pimcore/static6/img/flat-color-icons/businesswoman.svg) center center no-repeat !important;
 }
 
-.pimcore_icon_usergroup{
+.pimcore_icon_usergroup, .pimcore_icon_save_and_share{
     background: url(/pimcore/static6/img/flat-color-icons/collaboration.svg) center center no-repeat !important;
 }
 
@@ -1080,4 +1080,8 @@
 
 .pimcore_icon_operator_trimmer {
     background: url("/pimcore/static6/img/flat-color-icons/word.svg") center center no-repeat !important;
+}
+
+.pimcore_icon_favourite {
+    background: url(/pimcore/static6/img/flat-color-icons/star.svg) center center no-repeat !important;
 }

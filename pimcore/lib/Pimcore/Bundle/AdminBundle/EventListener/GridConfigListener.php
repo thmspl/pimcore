@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Pimcore
  *
@@ -45,6 +43,7 @@ class GridConfigListener implements EventSubscriberInterface
         $class = $event->getClassDefinition();
         $classId = $class->getId();
         $this->cleanupGridConfigs('classId = ' . $classId);
+        $this->cleanupGridConfigFafourites('classId = ' . $classId);
     }
 
     /**
@@ -55,11 +54,18 @@ class GridConfigListener implements EventSubscriberInterface
         $user = $event->getUserRole();
         $userId = $user->getId();
         $this->cleanupGridConfigs('ownerId = ' . $userId);
+        $this->cleanupGridConfigFafourites('ownerId = ' . $userId);
     }
 
     protected function cleanupGridConfigs($condition)
     {
         $db = Db::get();
         $db->query('DELETE FROM gridconfigs where ' . $condition);
+    }
+
+    protected function cleanupGridConfigFafourites($condition)
+    {
+        $db = Db::get();
+        $db->query('DELETE FROM gridconfig_favourites where ' . $condition);
     }
 }

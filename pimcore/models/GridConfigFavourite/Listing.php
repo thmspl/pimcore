@@ -15,21 +15,21 @@
  * @license    http://www.pimcore.org/license     GPLv3 and PEL
  */
 
-namespace Pimcore\Model\GridConfig;
+namespace Pimcore\Model\GridConfigFavourite;
 
 use Pimcore\Model;
 
 /**
- * @method \Pimcore\Model\GridConfig\Listing\Dao getDao()
+ * @method \Pimcore\Model\GridConfigFavourite\Listing\Dao getDao()
  */
 class Listing extends Model\Listing\AbstractListing
 {
     /**
-     * Contains the results of the list. They are all an instance of Schedule\Task
+     * Contains the results of the list. They are all an instance of GridConfigFavourite
      *
      * @var array
      */
-    public $gridconfigs = [];
+    public $gridconfigFavourites = [];
 
     /**
      * Tests if the given key is an valid order key to sort the results
@@ -46,20 +46,16 @@ class Listing extends Model\Listing\AbstractListing
     /**
      * @return array
      */
-    public function getGridConfigs()
+    public function getGridconfigFavourites()
     {
-        return $this->gridconfigs;
+        return $this->gridconfigFavourites;
     }
 
     /**
-     * @param $gridConfigs
-     *
-     * @return $this
+     * @param array $gridconfigFavourites
      */
-    public function setGridConfigs($gridConfigs)
+    public function setGridconfigFavourites($gridconfigFavourites)
     {
-        $this->gridConfigs = $gridConfigs;
-
-        return $this;
+        $this->gridconfigFavourites = $gridconfigFavourites;
     }
 }
